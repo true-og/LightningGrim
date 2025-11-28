@@ -76,7 +76,6 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     compileOnly(libs.paper.api)
     compileOnly(libs.placeholderapi)
@@ -185,12 +184,11 @@ bukkit {
                 "Shows lists of specific data"
             default = Permission.Default.FALSE
         }
-
     }
 }
 
 publishing.publications.create<MavenPublication>("maven") {
-    artifact(tasks["shadowJar"])
+    artifact(tasks.named("shadowJar"))
 }
 
 tasks {

@@ -1,5 +1,5 @@
 <div align="center">
- <h1>GrimAC</h1>
+ <h1>GrimAC (LightningGrim Fork)</h1>
 
  <div>
   <a href="https://github.com/GrimAnticheat/Grim/actions/workflows/gradle-publish.yml">
@@ -23,15 +23,15 @@ It currently supports minecraft versions 1.8–1.21. Geyser players are fully ex
 This project is considered feature-complete for the 2.0 (open-source) branch. If you would like a bug fix or enhancement and cannot sponsor the work, pull requests are welcome.
 A premium version is planned, which will offer additional subscription-based paid checks, such as heuristics.
 
-## Downloads
+## Changes over Grim:
 
-- Latest updates:
-  - **[Modrinth](https://modrinth.com/plugin/grimac)** *(recommended)*
-  - GitHub
-  artifacts: [Bukkit](https://nightly.link/GrimAnticheat/Grim/workflows/gradle-publish/2.0/grimac-bukkit.zip), [Fabric](https://nightly.link/GrimAnticheat/Grim/workflows/gradle-publish/2.0/grimac-fabric.zip) *(bleeding edge)*
-- Major releases only:
-  - ~~[Hangar](https://hangar.papermc.io/GrimAnticheat/GrimAnticheat)~~
-  - ~~[SpigotMC](https://www.spigotmc.org/resources/grim-anticheat.99923/)~~
+- WallHit - checks for hitting through walls
+- EntityPierce - checks for hitting through other entities
+- Bukkit Event Piston Optimizations
+- Optimized Hitbox/Collision Boxes
+- Optimized Reach calculations
+- Checks for PacketOrder (patches lots of noslow, autoblocks, etc...)
+- Checks for Inventory interactions (prevents using crafting slots as extra storage, moving while having inventory open, etc...)
 
 ## Resources
 
@@ -40,17 +40,11 @@ A premium version is planned, which will offer additional subscription-based pai
 - For community support and project discussion join our [Discord](https://discord.grim.ac).
 
 
-## Pull Requests
-
-See [Contributing](CONTRIBUTING.md) for more information about contributing and what our guidelines
-are.
-
-
 ## Requirements & Installation
 
 - Java 17 or higher. *For more details
   see [Updating-to-Java-17](https://github.com/GrimAnticheat/Grim/wiki/Updating-to-Java-17).*
-- A Spigot, Paper, Folia, or Fabric server environment. *For more details
+- A Spigot, Paper, or Folia, server environment. *For more details
   see [Supported-environments](https://github.com/GrimAnticheat/Grim/wiki/Supported-environments).*
 - If you use Geyser, place Floodgate on the backend server so grim can exempt bedrock players. Grim
   cannot access the Floodgate API if it is on the proxy.
@@ -67,7 +61,7 @@ information.
 
 1. `git clone https://github.com/Axionize/LightningGrim`
 2. `cd LightningGrim`
-3. `./gradlew build`
+3. `./gradlew build clean eclipse --warning-mode all`
 4. The final jars will compile into the `<platform>/build/libs` folders
 
 ## Grim Supremacy

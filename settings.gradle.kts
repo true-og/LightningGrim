@@ -12,20 +12,6 @@ dependencyResolutionManagement {
 
 pluginManagement {
     repositories {
-        // For the Fabric Loom plugin
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = "FabricMC"
-                    url = uri("https://maven.fabricmc.net/")
-                }
-            }
-            filter {
-                includeModule("fabric-loom", "fabric-loom.gradle.plugin")
-                includeGroupByRegex("net.fabricmc.*")
-            }
-        }
-
         gradlePluginPortal()
     }
 }
@@ -60,12 +46,6 @@ if (gradle.startParameter.isBuildScan) {
     }
 }
 
-rootProject.name = "grimac"
+rootProject.name = "LightningGrim"
 include("common")
 include("bukkit")
-include("fabric")
-include(":fabric:mc1161")
-include(":fabric:mc1171")
-include(":fabric:mc1194")
-include(":fabric:mc1205")
-include(":fabric:mc1216")

@@ -9,6 +9,12 @@
  * Logic in: buildSrc/versioning/BuildConfig.kt & VersionUtil.kt
  */
 
+plugins {
+    base
+}
+
+import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.compile.JavaCompile
 import versioning.BuildConfig
 import versioning.VersionUtil
 
@@ -47,3 +53,15 @@ subprojects {
         options.isIncremental = true
     }
 }
+
+tasks.register<Copy>("copyBukkitJarToRoot") {
+    dependsOn(":bukkit:shadowJar")
+    from(project(":bukkit").layout.buildDirectory.dir("libs"))
+    include("LightningGrim-bukkit-*.jar")
+    into(layout.buildDirectory.dir("libs"))
+}
+
+tasks.named("build") {
+    dependsOn("copyBukkitJarToRoot")
+}
+

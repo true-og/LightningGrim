@@ -1,6 +1,7 @@
 import versioning.BuildConfig
 
 plugins {
+    eclipse
     `maven-publish`
     grim.`base-conventions`
 }
