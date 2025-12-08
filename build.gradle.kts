@@ -56,8 +56,10 @@ subprojects {
 
 tasks.register<Copy>("copyBukkitJarToRoot") {
     dependsOn(":bukkit:shadowJar")
-    from(project(":bukkit").layout.buildDirectory.dir("libs"))
-    include("LightningGrim-bukkit-*.jar")
+    from(project(":bukkit").layout.buildDirectory.dir("libs")) {
+        include("LightningGrim-bukkit-*.jar")
+        rename("LightningGrim-bukkit-.*\\.jar", "LightningGrim-$baseVersion.jar")
+    }
     into(layout.buildDirectory.dir("libs"))
 }
 
