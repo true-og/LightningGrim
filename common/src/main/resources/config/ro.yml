@@ -1,7 +1,7 @@
-# Configurația principală GrimAC
-# Cod sursă: https://github.com/MWHunter/Grim
+# Configurația principală LightningGrim
+# Cod sursă: https://github.com/Axionize/LightningGrim
 # Drepturi de autor 2025 DefineOutside și colaboratorii, licențiat sub GPLv3.
-# Binarele modificate sau pluginurile cu cod Grim copiat trebuie să fie private,
+# Binarele modificate sau pluginurile cu cod LightningGrim copiat trebuie să fie private,
 # sau cu întregul cod sursă disponibil cumpărătorilor fără costuri suplimentare.
 
 alerts:
@@ -28,7 +28,7 @@ client-brand:
         - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4}$"
         - "^Feather Fabric$"
         - "^labymod$"
-    # Grim va bloca anumite versiuni Forge care includ hackuri Reach integrate (Forge 1.18.2 până la 1.19.3).
+    # LightningGrim va bloca anumite versiuni Forge care includ hackuri Reach integrate (Forge 1.18.2 până la 1.19.3).
     # Setarea acestei opțiuni la false va permite acestor clienți să se conecteze la server. Dezactivează pe propriul risc.
     disconnect-blacklisted-forge-versions: true
 
@@ -42,7 +42,7 @@ spectators:
 # Cât timp au jucătorii până să fie deconectați pentru timeout? Implicit = 60 secunde
 max-transaction-time: 60
 
-# Activează pentru a opri Grim din a anula pongs primite de la jucători.
+# Activează pentru a opri LightningGrim din a anula pongs primite de la jucători.
 # Poate îmbunătăți compatibilitatea cu alte anticheaturi. Poate cauza probleme cu limitatoarele de pachete.
 # Nu activa dacă nu ești sigur ce faci.
 disable-pong-cancelling: false
@@ -99,7 +99,7 @@ RotationPlace:
     cancelvl: 5
 
 # Verificare NoSlow bazată pe predicție
-# Grim ține cont de netcode-ul buguit aici... greu de fals chiar și când spamezi click dreapta și butonul offhand
+# LightningGrim ține cont de netcode-ul buguit aici... greu de fals chiar și când spamezi click dreapta și butonul offhand
 # Mult mai stabil decât alte anticheaturi, dar raportează orice falsuri... am reparat multe probleme de netcode aici.
 NoSlow:
     # Cât de mare abatere e considerată „cheating”
@@ -195,14 +195,14 @@ reset-item-usage-on-item-update: true
 reset-item-usage-on-attack: true
 reset-item-usage-on-slot-change: true
 
-# Grim uneori anulează pachete ilegale precum timer, după X pachete anulate într-o secundă, când să
-# deconectăm jucătorul? Este necesar deoarece unele limitatoare de pachete nu numără pachetele anulate de Grim.
+# LightningGrim uneori anulează pachete ilegale precum timer, după X pachete anulate într-o secundă, când să
+# deconectăm jucătorul? Este necesar deoarece unele limitatoare de pachete nu numără pachetele anulate de LightningGrim.
 packet-spam-threshold: 100
 # Activează pentru a afișa stacktrace când un jucător e deconectat din cauza packet-spam-threshold
 debug-packet-cancel: false
 
-# Grim poate aplica ca un jucător scos din starea de zbor să nu aibă mai mult de X ms ping
-# Deoarece Grim nu verifică în prezent jucătorii care zboară
+# LightningGrim poate aplica ca un jucător scos din starea de zbor să nu aibă mai mult de X ms ping
+# Deoarece LightningGrim nu verifică în prezent jucătorii care zboară
 # Pentru dezactivare, folosește -1
 max-ping-out-of-flying: 1000
 

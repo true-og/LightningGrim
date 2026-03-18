@@ -3,7 +3,7 @@ package versioning
 import java.io.ByteArrayOutputStream
 
 /**
- * Utility for computing the version string of GrimAC artifacts.
+ * Utility for computing the version string of LightningGrim artifacts.
  *
  * The version string is constructed based on:
  * - A base semantic version (e.g., "2.3.72")

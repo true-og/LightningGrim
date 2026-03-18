@@ -1,6 +1,6 @@
-# Contributing to GrimAC
+# Contributing to LightningGrim
 
-Thank you for your interest in contributing to GrimAC. This document outlines the guidelines for
+Thank you for your interest in contributing to LightningGrim. This document outlines the guidelines for
 making pull
 requests to the project. *We're usually pretty lenient with pull requests, but this guide will help
 make the process go more smoothly.*
@@ -31,7 +31,7 @@ make the process go more smoothly.*
 
 ### Development Notes
 
-- GrimAC is built using [Gradle](https://gradle.org/) kotlin scripts.
+- LightningGrim is built using [Gradle](https://gradle.org/) kotlin scripts.
 - Java 21 is currently required to build the project. A minimum of Java 17 is required to run it.
 
 ### Questions & Support

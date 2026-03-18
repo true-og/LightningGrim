@@ -1,5 +1,5 @@
-# Основная конфигурация GrimAC
-# Исходный код: https://github.com/MWHunter/Grim
+# Основная конфигурация LightningGrim
+# Исходный код: https://github.com/Axionize/LightningGrim
 # Авторское право 2025 DefineOutside и соавторы, лицензия GPLv3.
 # Модифицированные двоичные файлы, или плагины со скопированным исходным кодом, должны быть приватными,
 # или с полным исходным кодом, доступным покупателям без дополнительной платы.
@@ -28,7 +28,7 @@ client-brand:
         - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4}$"
         - "^Feather Fabric$"
         - "^labymod$"
-    # Grim will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
+    # LightningGrim will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
     # Setting this option to false will allow said clients to connect to the server. Disable this at your own risk.
     disconnect-blacklisted-forge-versions: true
 
@@ -42,7 +42,7 @@ spectators:
 # Сколько времени должно быть у игроков, пока мы не выкинем их за тайм-аут? По умолчанию = 60 секунд
 max-transaction-time: 60
 
-# Enable this to stop Grim cancelling pongs received from players.
+# Enable this to stop LightningGrim cancelling pongs received from players.
 # This may improve compatibility with other anticheats. It may cause issues with packet limiters.
 # Do not enable this if you are not sure what you are doing.
 disable-pong-cancelling: false
@@ -99,7 +99,7 @@ RotationPlace:
     cancelvl: 5
 
 # Основанная на предсказаниях проверка на отсутствие замедления
-# Grim учитывает баги неткода здесь... трудно ошибиться, даже если спамить правым кликом и кнопкой оффхенд.
+# LightningGrim учитывает баги неткода здесь... трудно ошибиться, даже если спамить правым кликом и кнопкой оффхенд.
 # Намного стабильнее, чем другие античиты, но, пожалуйста, сообщайте о любых фейлах... Я исправил тонну проблем с неткодом.
 NoSlow:
     # Насколько большое смещение является "читерством".
@@ -198,8 +198,8 @@ packet-spam-threshold: 100
 # Включите, чтобы вывести stacktrace, когда игрок кикается из-за packet-spam-threshold
 debug-packet-cancel: false
 
-# Grim может обеспечить, чтобы у игрока, выведенного из состояния полёта, пинг не превышал X мс
-# Это связано с тем, что Grim пока не проверяет игроков, находящихся в полёте
+# LightningGrim может обеспечить, чтобы у игрока, выведенного из состояния полёта, пинг не превышал X мс
+# Это связано с тем, что LightningGrim пока не проверяет игроков, находящихся в полёте
 # Для отключения используйте -1
 max-ping-out-of-flying: 1000
 

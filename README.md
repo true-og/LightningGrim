@@ -1,5 +1,5 @@
 <div align="center">
- <h1>GrimAC (LightningGrim Fork)</h1>
+ <h1>LightningGrim</h1>
 
  <div>
   <a href="https://github.com/GrimAnticheat/Grim/actions/workflows/gradle-publish.yml">
@@ -18,12 +18,12 @@
  <br>
 </div>
 
-GrimAC is an open source Minecraft anticheat designed to support the latest versions of Minecraft.
+LightningGrim is an open source Minecraft anticheat fork designed to support the latest versions of Minecraft.
 It currently supports minecraft versions 1.8–1.21. Geyser players are fully exempt from the anticheat to prevent false positives.
 This project is considered feature-complete for the 2.0 (open-source) branch. If you would like a bug fix or enhancement and cannot sponsor the work, pull requests are welcome.
 A premium version is planned, which will offer additional subscription-based paid checks, such as heuristics.
 
-## Changes over Grim:
+## Changes over GrimAC:
 
 - WallHit - checks for hitting through walls
 - EntityPierce - checks for hitting through other entities
@@ -46,14 +46,14 @@ A premium version is planned, which will offer additional subscription-based pai
   see [Updating-to-Java-17](https://github.com/GrimAnticheat/Grim/wiki/Updating-to-Java-17).*
 - A Spigot, Paper, or Folia, server environment. *For more details
   see [Supported-environments](https://github.com/GrimAnticheat/Grim/wiki/Supported-environments).*
-- If you use Geyser, place Floodgate on the backend server so grim can exempt bedrock players. Grim
+- If you use Geyser, place Floodgate on the backend server so LightningGrim can exempt bedrock players. LightningGrim
   cannot access the Floodgate API if it is on the proxy.
 - If you use ViaVersion, it should be on the backend server as movement is highly dependent on
   client version.
 
 ## Developer Plugin API
 
-Grim's plugin API allows you to integrate Grim into your own plugins. Visit
+LightningGrim's plugin API allows you to integrate LightningGrim into your own plugins. Visit
 the [plugin API repository](https://github.com/GrimAnticheat/GrimAPI) for the source code and more
 information.
 
@@ -64,9 +64,9 @@ information.
 3. `./gradlew build clean eclipse --warning-mode all`
 4. The final jars will compile into the `<platform>/build/libs` folders
 
-## Grim Supremacy
+## LightningGrim Supremacy
 
-What makes Grim stand out against other anticheats?
+What makes LightningGrim stand out against other anticheats?
 
 ### Movement Simulation Engine
 
