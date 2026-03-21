@@ -31,7 +31,7 @@ public class PacketEventsInit implements LoadableInitable {
         if (!checkPacketEventsVersion()) {
             LogUtil.error("\n" +
                     "******************************************************\n" +
-                    "GrimAC requires PacketEvents >= " + MINIMUM_REQUIRED_PE_VERSION +
+                    "LightningGrim requires PacketEvents >= " + MINIMUM_REQUIRED_PE_VERSION +
                     (MINIMUM_REQUIRED_PE_VERSION.snapshot() ? "-SNAPSHOT" : "") + "\n" +
                     "Current version: " + PacketEvents.getAPI().getVersion() + "\n" +
                     "Please update PacketEvents to a compatible version.\n" +

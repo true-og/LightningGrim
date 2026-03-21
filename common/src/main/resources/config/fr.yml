@@ -1,5 +1,5 @@
-# Configuration principale de GrimAC
-# Code source : https://github.com/MWHunter/Grim
+# Configuration principale de LightningGrim
+# Code source : https://github.com/Axionize/LightningGrim
 # Copyright 2025 DefineOutside et contributeurs, sous licence GPLv3.
 # Les binaires modifiés, ou les plugins contenant du code grim copié, doivent être privés,
 # ou avec le code source complet disponible pour les acheteurs sans frais supplémentaires.
@@ -28,7 +28,7 @@ client-brand:
         - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4}$"
         - "^Feather Fabric$"
         - "^labymod$"
-    # Grim will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
+    # LightningGrim will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
     # Setting this option to false will allow said clients to connect to the server. Disable this at your own risk.
     disconnect-blacklisted-forge-versions: true
 
@@ -42,7 +42,7 @@ spectators:
 # Au bout de combien de temps les joueurs doivent-ils être expulsés en cas de perte de connexion ? Défault = 60 secondes
 max-transaction-time: 60
 
-# Enable this to stop Grim cancelling pongs received from players.
+# Enable this to stop LightningGrim cancelling pongs received from players.
 # This may improve compatibility with other anticheats. It may cause issues with packet limiters.
 # Do not enable this if you are not sure what you are doing.
 disable-pong-cancelling: false
@@ -99,7 +99,7 @@ RotationPlace:
     cancelvl: 5
 
 # Vérification de no-slow basée sur la prédiction.
-# Grim tient compte des problèmes de netcode ici... difficile à tromper même en spamant le clic droit et le bouton de la main secondaire.
+# LightningGrim tient compte des problèmes de netcode ici... difficile à tromper même en spamant le clic droit et le bouton de la main secondaire.
 # Bien plus stable que les autres anti-triche, mais veuillez signaler toute fausse détection... J'ai corrigé de nombreux problèmes de netcode ici.
 NoSlow:
     # Quel est le niveau d'écart considéré comme "triche"
@@ -192,15 +192,15 @@ reset-item-usage-on-attack: true
 reset-item-usage-on-slot-change: true
 reset-item-usage-on-item-use: true
 
-# Grim annule parfois des paquets illégaux, comme ceux liés au chronomètre, après avoir annulé X paquets en une seconde,
+# LightningGrim annule parfois des paquets illégaux, comme ceux liés au chronomètre, après avoir annulé X paquets en une seconde,
 # à partir de combien de paquets annulés devrions-nous simplement expulser le joueur ?
-# Cela est nécessaire car certains limiteurs de paquets ne comptent pas les paquets annulés par Grim.
+# Cela est nécessaire car certains limiteurs de paquets ne comptent pas les paquets annulés par LightningGrim.
 packet-spam-threshold: 100
 # Activez ceci pour afficher une trace de pile lorsqu’un joueur est expulsé à cause du packet-spam-threshold
 debug-packet-cancel: false
 
-# Grim peut faire en sorte qu’un joueur sorti de l’état de vol n’ait pas plus de X ms de ping
-# Cela est dû au fait que Grim ne vérifie pas encore les joueurs en vol
+# LightningGrim peut faire en sorte qu’un joueur sorti de l’état de vol n’ait pas plus de X ms de ping
+# Cela est dû au fait que LightningGrim ne vérifie pas encore les joueurs en vol
 # Pour désactiver, utilisez -1
 max-ping-out-of-flying: 1000
 

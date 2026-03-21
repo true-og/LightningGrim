@@ -1,7 +1,7 @@
-# GrimAC configuratie
-# Broncode: https://github.com/MWHunter/Grim
+# LightningGrim configuratie
+# Broncode: https://github.com/Axionize/LightningGrim
 # Copyright 2025 DefineOutside en bijdragers, gelicentieerd onder GPLv3.
-# Gewijzigde binaire bestanden, of plugins met gekopieerde Grim code, moeten privé zijn,
+# Gewijzigde binaire bestanden, of plugins met gekopieerde LightningGrim code, moeten privé zijn,
 # of met volledige broncode beschikbaar voor kopers zonder extra kosten.
 
 alerts:
@@ -28,7 +28,7 @@ client-brand:
         - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4}$"
         - "^Feather Fabric$"
         - "^labymod$"
-    # Grim will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
+    # LightningGrim will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
     # Setting this option to false will allow said clients to connect to the server. Disable this at your own risk.
     disconnect-blacklisted-forge-versions: true
 
@@ -42,7 +42,7 @@ spectators:
 # Hoe lang moeten spelers hebben voordat we ze schoppen voor timing-out? Standaard = 60 seconden
 max-transaction-time: 60
 
-# Enable this to stop Grim cancelling pongs received from players.
+# Enable this to stop LightningGrim cancelling pongs received from players.
 # This may improve compatibility with other anticheats. It may cause issues with packet limiters.
 # Do not enable this if you are not sure what you are doing.
 disable-pong-cancelling: false
@@ -62,7 +62,7 @@ Simulation:
     # Hoe groot moet de afwijking van de beweging van de speler zijn?
     # Gemeten in blokken van de mogelijke beweging
     # We houden rekening met Optifine door trig-tabellen te verwisselen, maar door dit te verlagen naar 0,001 zal FastMath
-    # zal ervoor zorgen dat Grim wordt gemarkeerd als deze compensatie niet werkt...
+    # zal ervoor zorgen dat LightningGrim wordt gemarkeerd als deze compensatie niet werkt...
     threshold: 0.001
     # Hoe groot is de overtreding in een tick voordat de speler onmiddellijk een terugslag krijgt?
     # -1 om uit te schakelen
@@ -99,7 +99,7 @@ RotationPlace:
     cancelvl: 5
 
 # Op voorspelling gebaseerde NoSlow-controle
-# Grim is verantwoordelijk voor buggy netcode hier... moeilijk om vals te spelen, zelfs als je met rechts klikt en de offhand-knop spamt
+# LightningGrim is verantwoordelijk voor buggy netcode hier... moeilijk om vals te spelen, zelfs als je met rechts klikt en de offhand-knop spamt
 # Veel stabieler dan andere anticheats, maar rapporteer alsjeblieft alle falses... Ik heb hier een heleboel netcode-problemen opgelost.
 NoSlow:
     # Hoeveel van een offset is "valsspelen"?
@@ -196,14 +196,14 @@ reset-item-usage-on-attack: true
 reset-item-usage-on-slot-change: true
 reset-item-usage-on-item-use: true
 
-# Grim annuleert soms illegale pakketten zoals met timer, na X pakketten in een seconde geannuleerd, wanneer moeten
+# LightningGrim annuleert soms illegale pakketten zoals met timer, na X pakketten in een seconde geannuleerd, wanneer moeten
 # we de speler gewoon schoppen? Dit is nodig omdat sommige pakket-begrenzers pakketten die door grim worden geannuleerd niet tellen
 packet-spam-threshold: 100
 # Schakel dit in om een stacktrace af te drukken wanneer een speler wordt gekickt wegens packet-spam-threshold
 debug-packet-cancel: false
 
-# Grim kan afdwingen dat een speler die uit de vliegmodus is gezet niet meer dan X ms ping heeft
-# Dit komt doordat Grim momenteel vliegende spelers niet controleert
+# LightningGrim kan afdwingen dat een speler die uit de vliegmodus is gezet niet meer dan X ms ping heeft
+# Dit komt doordat LightningGrim momenteel vliegende spelers niet controleert
 # Om uit te schakelen, gebruik -1
 max-ping-out-of-flying: 1000
 
