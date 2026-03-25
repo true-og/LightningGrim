@@ -33,23 +33,26 @@ A premium version is planned, which will offer additional subscription-based pai
 - Checks for PacketOrder (patches lots of noslow, autoblocks, etc...)
 - Checks for Inventory interactions (prevents using crafting slots as extra storage, moving while having inventory open, etc...)
 
+## Requirements & Installation
+
+- Java 17 or higher. *For more details, see [Updating-to-Java-17](https://github.com/GrimAnticheat/Grim/wiki/Updating-to-Java-17).*
+- A Spigot, Paper, Folia, or Fabric server environment. *For more details, see [Supported-environments](https://github.com/GrimAnticheat/Grim/wiki/Supported-environments).*
+
+If you use a proxy such as Velocity or Bungeecord:
+- If you use Geyser, Floodgate must be installed on the backend server (where Grim is) so Grim can access the Floodgate API.
+- If you use ViaVersion, it must be installed on the backend server (where Grim is) ONLY.
+  Grim does not support having ViaVersion installed on the proxy, even if it is also installed on the backend.
+
 ## Resources
 
 - For documentation and examples visit the [Wiki](https://github.com/GrimAnticheat/Grim/wiki).
 - For answers to commonly asked questions visit the [FAQ](https://github.com/GrimAnticheat/Grim/wiki/FAQ).
 - For community support and project discussion join our [Discord](https://discord.grim.ac).
 
+## Pull Requests
 
-## Requirements & Installation
-
-- Java 17 or higher. *For more details
-  see [Updating-to-Java-17](https://github.com/GrimAnticheat/Grim/wiki/Updating-to-Java-17).*
-- A Spigot, Paper, or Folia, server environment. *For more details
-  see [Supported-environments](https://github.com/GrimAnticheat/Grim/wiki/Supported-environments).*
-- If you use Geyser, place Floodgate on the backend server so LightningGrim can exempt bedrock players. LightningGrim
-  cannot access the Floodgate API if it is on the proxy.
-- If you use ViaVersion, it should be on the backend server as movement is highly dependent on
-  client version.
+See [Contributing](CONTRIBUTING.md) for more information about contributing and what our guidelines
+are.
 
 ## Developer Plugin API
 

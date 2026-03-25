@@ -26,7 +26,7 @@ client-brand:
     ignored-clients:
         - "^vanilla$"
         - "^fabric$"
-        - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4}$"
+        - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4},(?:fabric|forge)$"
         - "^Feather Fabric$"
         - "^labymod$"
     # LightningGrim will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
@@ -46,6 +46,13 @@ max-transaction-time: 60
 # This may improve compatibility with other anticheats. It may cause issues with packet limiters.
 # Do not enable this if you are not sure what you are doing.
 disable-pong-cancelling: false
+
+# Il gestore predefinito per la risincronizzazione dei blocchi deve essere disabilitato?
+# Di default, Grim legge i blocchi dal mondo del server e li invia al client per correggere il desync.
+# Se utilizzi plugin che creano blocchi finti basati su pacchetti (che non esistono nel mondo del server),
+# dovresti impostare questo su true per impedire a Grim di sovrascriverli con aria o blocchi reali.
+# Questo forza l'uso di un gestore "NoOp" (Nessuna Operazione) a meno che non ne venga fornito uno personalizzato via API.
+disable-default-resync-handler: false
 
 # Should the duplicate movement packet be cancelled?
 # Mojang has fixed this issue in 1.21. This was their attempt to fix the "bucket desync". https://bugs.mojang.com/browse/MC-12363
@@ -196,9 +203,9 @@ history:
     # Quale nome server deve essere inserito per il comando history? Utile se usi lo stesso database per più server
     server-name: Prison
     database:
-        # Usa SQLITE per l’archiviazione locale, MYSQL se hai un database MySQL esterno. Aggiornato solo al riavvio del server
+        # Usa SQLITE per l'archiviazione locale, usa MYSQL o POSTGRESQL se hai un database esterno. Questo viene aggiornato solo al riavvio del server
         type: SQLITE
-        # Dettagli di connessione MySQL
+        # Dettagli di connessione al database
         host: localhost
         port: 3306
         database: grim

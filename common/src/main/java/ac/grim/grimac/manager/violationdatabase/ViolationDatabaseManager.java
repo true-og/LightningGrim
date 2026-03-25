@@ -6,6 +6,7 @@ import ac.grim.grimac.api.plugin.GrimPlugin;
 import ac.grim.grimac.manager.init.ReloadableInitable;
 import ac.grim.grimac.manager.init.start.StartableInitable;
 import ac.grim.grimac.manager.violationdatabase.mysql.MySQLViolationDatabase;
+import ac.grim.grimac.manager.violationdatabase.postgresql.PostgresqlViolationDatabase;
 import ac.grim.grimac.manager.violationdatabase.sqlite.SQLiteViolationDatabase;
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.anticheat.LogUtil;
@@ -57,7 +58,7 @@ public class ViolationDatabaseManager implements StartableInitable, ReloadableIn
                     } catch (ClassNotFoundException e) {
                         LogUtil.error(
                                 """
-                                        Could not load SQLite driver for /grim history database.
+                                        IMPORTANT: Could not load SQLite driver for /grim history database.
                                         Download the minecraft-sqlite-jdbc mod/plugin for SQLite support, or change history.database.type
                                         Alternatively set history.enabled=false to remove this message if /grim history support is not desired"""
                         );
@@ -72,10 +73,11 @@ public class ViolationDatabaseManager implements StartableInitable, ReloadableIn
             }
 
             case "MYSQL" -> {
-                String host = cfg.getStringElse("history.database.host",     "localhost:3306");
-                String db   = cfg.getStringElse("history.database.database", "grimac");
+                int port = cfg.getIntElse("history.database.port", 3306);
+                String host = cfg.getStringElse("history.database.host", "localhost") + ":" + port;
+                String db = cfg.getStringElse("history.database.database", "grimac");
                 String user = cfg.getStringElse("history.database.username", "root");
-                String pwd  = cfg.getStringElse("history.database.password", "password");
+                String pwd = cfg.getStringElse("history.database.password", "password");
 
                 if (database instanceof MySQLViolationDatabase mysql
                         && mysql.sameConfig(host, db, user, pwd)) {
@@ -83,6 +85,29 @@ public class ViolationDatabaseManager implements StartableInitable, ReloadableIn
                 }
                 database.disconnect();
                 database = new MySQLViolationDatabase(plugin, host, db, user, pwd);
+                try {
+                    database.connect();
+                    loaded = true;
+                } catch (SQLException e) {
+                    LogUtil.error(e);
+                    this.database = NoOpViolationDatabase.INSTANCE;
+                    loaded = false;
+                }
+            }
+
+            case "POSTGRESQL" -> {
+                int port = cfg.getIntElse("history.database.port", 3306);
+                String host = cfg.getStringElse("history.database.host", "localhost") + ":" + port;
+                String db   = cfg.getStringElse("history.database.database", "grimac");
+                String user = cfg.getStringElse("history.database.username", "root");
+                String pwd  = cfg.getStringElse("history.database.password", "password");
+
+                if (database instanceof PostgresqlViolationDatabase postgresql
+                        && postgresql.sameConfig(host, db, user, pwd)) {
+                    break;                          // nothing changed → keep pool
+                }
+                database.disconnect();
+                database = new PostgresqlViolationDatabase(host, db, user, pwd);
                 try {
                     database.connect();
                     loaded = true;
@@ -115,5 +140,4 @@ public class ViolationDatabaseManager implements StartableInitable, ReloadableIn
     public List<Violation> getViolations(UUID player, int page, int limit) {
         return database.getViolations(player, page, limit);
     }
-
 }

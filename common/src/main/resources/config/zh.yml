@@ -26,7 +26,7 @@ client-brand:
     ignored-clients:
         - "^vanilla$"
         - "^fabric$"
-        - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4}$"
+        - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4},(?:fabric|forge)$"
         - "^Feather Fabric$"
         - "^labymod$"
     # LightningGrim 将把包含内置攻击距离修改功能的特定 Forge 版本列入黑名单（Forge 1.18.2 至 1.19.3） 可能会导致1.18.2-1.19.3的Forge版本玩家无法进入服务器。
@@ -41,14 +41,21 @@ spectators:
         - ""
 
 # 在玩家无法接收 LightningGrim的 transaction 数据包后,多少秒对玩家进行踢出
-# 踢出原因为: disconnect.timeout
+# 默认踢出原因为: disconnect.timeout
 # 玩家超时踢出时间（默认 = 60 秒）
 max-transaction-time: 60
 
-# Enable this to stop LightningGrim cancelling pongs received from players.
-# This may improve compatibility with other anticheats. It may cause issues with packet limiters.
-# Do not enable this if you are not sure what you are doing.
+# 启用此选项可阻止 LightningGrim 取消玩家发送的 pong 信息。 
+# 这可能会提高与其他反作弊软件（如果您正在将 Grim 与其他反作弊一起启用的话）的兼容性。但可能会导致数据包限制器出现问题。 
+# 如果您不确定自己在做什么，请不要启用此功能。
 disable-pong-cancelling: false
+
+# 是否应禁用默认的方块重新同步处理程序？
+# 默认情况下，Grim 会从服务器世界读取方块并将它们发送给客户端以修复不同步问题。
+# 如果您使用通过数据包创建虚假方块（在服务器世界中不存在）的插件，
+# 您应将其设置为 true，以防止 Grim用空气/真实方块覆盖它们。
+# 除非通过 API 提供了自定义处理程序，否则这将强制使用 "NoOp"（无操作）处理程序。
+disable-default-resync-handler: false
 
 # 是否对重复的移动数据包进行撤销?
 # 这可以修复 "bucket desync". https://bugs.mojang.com/browse/MC-12363,不过Mojang已经在1.21修复了这个问题
@@ -205,7 +212,7 @@ packet-spam-threshold: 100
 # 启用此项可在玩家因 packet-spam-threshold 被踢时打印堆栈追踪
 debug-packet-cancel: false
 
-# LightningGrim 能够强制执行一个规则：被设置为非飞行状态的玩家的 ping 值不能超过 X 毫秒。这是因为 LightningGrim 目前不检查处于飞行状态的玩家。
+# LightningGrim 能够强制执行一个规则：被设置为非飞行状态的玩家的 ping 值不能超过 X 毫秒。这是因为 Grim 目前不检查处于飞行状态的玩家。
 # 填写-1则关闭
 max-ping-out-of-flying: 1000
 
@@ -221,9 +228,9 @@ history:
     # history 指令中插入的服务器名称？如果多个服务器共用同一数据库则很有用
     server-name: Prison
     database:
-        # 本地存储使用 SQLITE，外部数据库使用 MYSQL。仅在重启服务器后生效
+        # 本地存储使用SQLITE，如有外部数据库请使用MYSQL或POSTGRESQL。此设置仅在服务器重启时更新
         type: SQLITE
-        # MySQL 连接详情
+        # 数据库连接详情
         host: localhost
         port: 3306
         database: grim

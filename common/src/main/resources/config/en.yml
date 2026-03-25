@@ -25,7 +25,7 @@ client-brand:
     ignored-clients:
         - "^vanilla$"
         - "^fabric$"
-        - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4}$"
+        - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4},(?:fabric|forge)$"
         - "^Feather Fabric$"
         - "^labymod$"
     # LightningGrim will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
@@ -46,6 +46,13 @@ max-transaction-time: 60
 # This may improve compatibility with other anticheats. It may cause issues with packet limiters.
 # Do not enable this if you are not sure what you are doing.
 disable-pong-cancelling: false
+
+# Should the default block resynchronization handler be disabled?
+# By default, Grim reads blocks from the server world and sends them to the client to fix desync.
+# If you use plugins that create fake packet-based blocks (which don't exist in the server world),
+# you should set this to true to prevent Grim from overwriting them with air/real blocks.
+# This forces the use of a "NoOp" (No Operation) handler unless a custom one is provided via API.
+disable-default-resync-handler: false
 
 # Should the duplicate movement packet be cancelled?
 # Mojang has fixed this issue in 1.21. This was their attempt to fix the "bucket desync". https://bugs.mojang.com/browse/MC-12363
@@ -218,9 +225,9 @@ history:
     # What should the inserted server name be for the history command? This is useful if you use the same database for multiple servers
     server-name: Prison
     database:
-        # Use SQLITE for local storage, use MYSQL if you have an external MySQL database. This is only updated on server restart
+        # Use SQLITE for local storage, use MYSQL or POSTGRESQL if you have an external database. This is only updated on server restart
         type: SQLITE
-        # MySQL connection details
+        # database connection details
         host: localhost
         port: 3306
         database: grim

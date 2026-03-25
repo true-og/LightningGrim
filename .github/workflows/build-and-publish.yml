@@ -3,6 +3,11 @@ name: Reusable Build and Publish
 on:
     workflow_call:
         inputs:
+            runner:
+                description: 'The runner to use for the build job.'
+                required: false
+                type: string
+                default: 'ubuntu-latest'
             is-release-build:
                 description: 'True if this is a release build, which affects versioning and publishing.'
                 required: true
@@ -36,7 +41,7 @@ on:
 
 jobs:
     build:
-        runs-on: ubuntu-latest
+        runs-on: ${{ inputs.runner }}
         permissions:
             # Grant permission to write contents (for creating tags/refs)
             contents: write
@@ -106,7 +111,7 @@ jobs:
                   echo "Build version: $VERSION"
 
             - name: Publish Build Scan URL
-                # Only run this step if a scan was requested
+              # Only run this step if a scan was requested
               if: ${{ inputs.run-build-scan == true }}
               run: |
                   # Search the log file for the build scan URL and extract it
@@ -124,14 +129,14 @@ jobs:
                   fi
 
             - name: Upload Bukkit Artifact
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v6
               with:
                   name: grimac-bukkit
                   path: ${{ github.workspace }}/bukkit/build/libs/grimac-bukkit-${{ env.BUILD_VERSION }}.jar
                   if-no-files-found: error
 
             - name: Upload Fabric Artifact
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v6
               with:
                   name: grimac-fabric
                   path: ${{ github.workspace }}/fabric/build/libs/grimac-fabric-${{ env.BUILD_VERSION }}.jar
@@ -152,7 +157,7 @@ jobs:
 
             - name: Prepare Final Changelog
               id: changelog
-                # Add this 'env' block to safely load the changelogs as environment variables
+              # Add this 'env' block to safely load the changelogs as environment variables
               env:
                   RELEASE_NOTES: ${{ inputs.release-changelog }}
                   DEV_NOTES: ${{ steps.git-cliff.outputs.content }}
@@ -192,13 +197,13 @@ jobs:
               if: ${{ inputs.publish-artifacts == true && env.MODRINTH_ID != '' && env.MODRINTH_TOKEN != '' }}
               uses: Kir-Antipov/mc-publish@v3.3
               with:
-                  modrinth-id:    ${{ secrets.MODRINTH_ID }}
+                  modrinth-id: ${{ secrets.MODRINTH_ID }}
                   modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
                   modrinth-featured: ${{ inputs.is-release-build }} # Only feature release builds
 
                   files: bukkit/build/libs/grimac-bukkit-${{ env.BUILD_VERSION }}.jar
                   name: LightningGrim Anticheat (Bukkit) ${{ env.BUILD_VERSION }}-b${{ steps.buildnumber.outputs.build_number }}
-                  version: ${{ env.BUILD_VERSION }}
+                  version: ${{ env.BUILD_VERSION }}-b${{ steps.buildnumber.outputs.build_number }}
                   version-type: ${{ inputs.release-version-type }}
                   changelog: ${{ steps.changelog.outputs.notes }}
                   loaders: |
@@ -207,7 +212,7 @@ jobs:
                       paper
                       folia
                       purpur
-                  game-versions: '>=1.7 <=1.21.10'
+                  game-versions: '>=1.7 <=1.21.11'
 
             - name: Publish Fabric to Modrinth
               if: ${{ inputs.publish-artifacts == true && env.MODRINTH_ID != '' && env.MODRINTH_TOKEN != '' }}
@@ -219,7 +224,7 @@ jobs:
 
                   files: fabric/build/libs/grimac-fabric-${{ env.BUILD_VERSION }}.jar
                   name: LightningGrim Anticheat (Fabric) ${{ env.BUILD_VERSION }}-b${{ steps.buildnumber.outputs.build_number }}
-                  version: ${{ env.BUILD_VERSION }}
+                  version: ${{ env.BUILD_VERSION }}-b${{ steps.buildnumber.outputs.build_number }}
                   version-type: ${{ inputs.release-version-type }}
                   changelog: ${{ steps.changelog.outputs.notes }}
                   loaders: |
