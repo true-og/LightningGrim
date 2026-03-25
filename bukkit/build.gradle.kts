@@ -27,9 +27,12 @@ repositories {
         includeGroup("me.clip")
     }
 
+    exclusive("https://repo.codemc.io/repository/maven-releases/", { mavenContent { releasesOnly() } }) {
+        includeGroup("com.github.retrooper")
+    }
+
     exclusive("https://repo.grim.ac/snapshots") {
         includeGroup("ac.grim.grimac")
-        includeGroup("com.github.retrooper")
     }
 
     exclusive("https://nexus.scarsz.me/content/repositories/releases", { mavenContent { releasesOnly() } }) {
