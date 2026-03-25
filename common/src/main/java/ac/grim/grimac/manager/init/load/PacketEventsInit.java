@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 public class PacketEventsInit implements LoadableInitable {
 
     private final PacketEventsAPI<?> packetEventsAPI;
-    PEVersion MINIMUM_REQUIRED_PE_VERSION = new PEVersion(2, 8, 0, true);
+    private static final PEVersion MINIMUM_REQUIRED_PE_VERSION = new PEVersion(2, 11, 2, false);
 
     public PacketEventsInit(PacketEventsAPI<?> packetEventsAPI) {
         this.packetEventsAPI = packetEventsAPI;
