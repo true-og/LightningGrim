@@ -266,10 +266,19 @@ public class PacketEntityReplication extends Check implements PacketCheck {
 
             if (slot.getWindowId() == 0) {
                 Runnable task = () -> {
-                    if (slot.getSlot() - 36 == player.packetStateData.lastSlotSelected && (
-                            !player.inventory.getHeldItem().is(slot.getItem().getType()) || player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8)
-                    ) || slot.getSlot() == 45 && !player.inventory.getOffHand().is(slot.getItem().getType())) {
-                        InteractionHand hand = slot.getSlot() == 45 ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+                    // Preserve the legacy slowed-state update, but only reset item usage when the type changes.
+                    final boolean legacyClient = player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8);
+                    final boolean heldSlot = slot.getSlot() - 36 == player.packetStateData.lastSlotSelected;
+                    final boolean heldTypeChanged = heldSlot && !player.inventory.getHeldItem().is(slot.getItem().getType());
+                    final boolean offHandSlot = slot.getSlot() == 45;
+                    final boolean offHandTypeChanged = offHandSlot && !player.inventory.getOffHand().is(slot.getItem().getType());
+
+                    if (heldSlot && legacyClient && player.packetStateData.itemInUseHand == InteractionHand.MAIN_HAND) {
+                        player.packetStateData.setSlowedByUsingItem(false);
+                    }
+
+                    if (heldTypeChanged || offHandTypeChanged) {
+                        InteractionHand hand = offHandSlot ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
                         if (hand == player.packetStateData.itemInUseHand) {
                             player.packetStateData.setSlowedByUsingItem(false);
                         }
@@ -288,30 +297,30 @@ public class PacketEntityReplication extends Check implements PacketCheck {
 
             if (items.getWindowId() == 0) { // Player inventory
                 Runnable task = () -> {
-                    if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8)) {
+                    // Preserve the legacy slowed-state update, but only reset item usage when the type changes.
+                    final boolean legacyClient = player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8);
+
+                    if (legacyClient && player.packetStateData.itemInUseHand != null) {
                         player.packetStateData.setSlowedByUsingItem(false);
-                        if (player.isResetItemUsageOnItemUpdate()) {
+                    }
+
+                    if (items.getItems().size() > 45 && !player.inventory.getOffHand().is(items.getItems().get(45).getType())) {
+                        if (player.packetStateData.itemInUseHand == InteractionHand.OFF_HAND) {
+                            player.packetStateData.setSlowedByUsingItem(false);
+                        }
+
+                        if (player.isResetItemUsageOnItemUpdate() && GrimAPI.INSTANCE.getItemResetHandler().getItemUsageHand(player.platformPlayer) == InteractionHand.OFF_HAND) {
                             GrimAPI.INSTANCE.getItemResetHandler().resetItemUsage(player.platformPlayer);
                         }
-                    } else {
-                        if (items.getItems().size() > 45 && !player.inventory.getOffHand().is(items.getItems().get(45).getType())) {
-                            if (player.packetStateData.itemInUseHand == InteractionHand.OFF_HAND) {
-                                player.packetStateData.setSlowedByUsingItem(false);
-                            }
+                    }
 
-                            if (player.isResetItemUsageOnItemUpdate() && GrimAPI.INSTANCE.getItemResetHandler().getItemUsageHand(player.platformPlayer) == InteractionHand.OFF_HAND) {
-                                GrimAPI.INSTANCE.getItemResetHandler().resetItemUsage(player.platformPlayer);
-                            }
+                    if (!player.inventory.getHeldItem().is(items.getItems().get(player.packetStateData.lastSlotSelected + 36).getType())) {
+                        if (player.packetStateData.itemInUseHand == InteractionHand.MAIN_HAND) {
+                            player.packetStateData.setSlowedByUsingItem(false);
                         }
 
-                        if (!player.inventory.getHeldItem().is(items.getItems().get(player.packetStateData.lastSlotSelected + 36).getType())) {
-                            if (player.packetStateData.itemInUseHand == InteractionHand.MAIN_HAND) {
-                                player.packetStateData.setSlowedByUsingItem(false);
-                            }
-
-                            if (player.isResetItemUsageOnItemUpdate() && GrimAPI.INSTANCE.getItemResetHandler().getItemUsageHand(player.platformPlayer) == InteractionHand.MAIN_HAND) {
-                                GrimAPI.INSTANCE.getItemResetHandler().resetItemUsage(player.platformPlayer);
-                            }
+                        if (player.isResetItemUsageOnItemUpdate() && GrimAPI.INSTANCE.getItemResetHandler().getItemUsageHand(player.platformPlayer) == InteractionHand.MAIN_HAND) {
+                            GrimAPI.INSTANCE.getItemResetHandler().resetItemUsage(player.platformPlayer);
                         }
                     }
                 };

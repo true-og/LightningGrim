@@ -5,6 +5,7 @@ import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.inventory.Inventory;
 import ac.grim.grimac.utils.inventory.InventoryStorage;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -144,11 +145,9 @@ public class CorrectingPlayerInventoryStorage extends InventoryStorage {
             }, null, 0);
         }
 
-        // Every five ticks, we pull a new item for the player
-        // This means no desync will last longer than 10 seconds
-        // (Required as mojang has screwed up some things with inventories that we can't easily fix)
-        // Don't spam this as it could cause lag (I was getting 0.3 ms to query this, this is done async though)
-        if (tickID % 5 == 0) {
+        // Poll one item every five ticks to recover desyncs without excessive async queries.
+        // Legacy translations can create false mismatches, so skip this poll for <=1.15.2 clients.
+        if (tickID % 5 == 0 && player.getClientVersion().isNewerThan(ClientVersion.V_1_15_2)) {
             int slotToCheck = (tickID / 5) % getSize();
             // If both these things are true, there is nothing that should be broken.
             if (!pendingFinalizedSlot.containsKey(slotToCheck) && !serverIsCurrentlyProcessingThesePredictions.containsKey(slotToCheck)) {
