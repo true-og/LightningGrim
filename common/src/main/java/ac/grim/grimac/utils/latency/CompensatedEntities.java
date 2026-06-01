@@ -242,10 +242,8 @@ public class CompensatedEntities {
         PacketEntity entity = player.compensatedEntities.getEntity(entityID);
         if (entity == null) return;
 
-        // 26.1 added AGE_LOCKED to AgeableMob after BABY, shifting all descendant field indices +1.
-        // Only affects entities extending AgeableMob (horses, pigs, striders, tamables, etc.)
-        final int ageableOffset = PacketEvents.getAPI().getServerManager().getVersion()
-                .isNewerThanOrEquals(ServerVersion.V_26_1) ? 1 : 0;
+        // 26.1 added AGE_LOCKED to AgeableMob after BABY — not present on PE 2.11.2 servers.
+        final int ageableOffset = 0;
 
         if (entity.isAgeable) {
             int id;

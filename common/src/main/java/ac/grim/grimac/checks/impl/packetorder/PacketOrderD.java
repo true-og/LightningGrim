@@ -30,11 +30,8 @@ public class PacketOrderD extends Check implements PacketCheck {
                 final boolean sneaking = packet.isSneaking().orElse(false);
                 final int entity = packet.getEntityId();
 
-                // via inserts these wrong...
-                if (action == InteractAction.INTERACT && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_26_1)) return;
-
                 if (packet.getHand() == InteractionHand.OFF_HAND) {
-                    if (action == InteractAction.INTERACT || player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_26_1)) {
+                    if (action == InteractAction.INTERACT) {
                         if (!sentMainhand) {
                             if (flagAndAlert("Skipped Mainhand") && shouldModifyPackets()) {
                                 event.setCancelled(true);

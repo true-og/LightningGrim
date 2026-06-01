@@ -10,7 +10,7 @@ import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
-import com.github.retrooper.packetevents.util.Vector3d;
+import com.github.retrooper.packetevents.util.Vector3f;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
 
 @CheckData(name = "BadPacketsT")
@@ -37,7 +37,7 @@ public class BadPacketsT extends Check implements PacketCheck {
             final WrapperPlayClientInteractEntity wrapper = new WrapperPlayClientInteractEntity(event);
             // Only INTERACT_AT actually has an interaction vector
             if (wrapper.getAction() != WrapperPlayClientInteractEntity.InteractAction.INTERACT_AT) return;
-            Vector3d targetVector = wrapper.getLocation();
+            Vector3f targetVector = wrapper.getTarget().orElse(null);
             if (targetVector == null) return; // shouldn't ever happen, but whatever
 
             final PacketEntity packetEntity = player.compensatedEntities.getEntity(wrapper.getEntityId());

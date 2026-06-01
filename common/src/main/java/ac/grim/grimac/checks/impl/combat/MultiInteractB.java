@@ -8,7 +8,7 @@ import ac.grim.grimac.utils.anticheat.MessageUtil;
 import ac.grim.grimac.utils.anticheat.update.PredictionComplete;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.util.Vector3d;
+import com.github.retrooper.packetevents.util.Vector3f;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 @CheckData(name = "MultiInteractB", experimental = true)
 public class MultiInteractB extends Check implements PostPredictionCheck {
     private final ArrayList<String> flags = new ArrayList<>();
-    private Vector3d lastPos;
+    private Vector3f lastPos;
     private boolean hasInteracted;
 
     public MultiInteractB(final GrimPlayer player) {
@@ -29,7 +29,7 @@ public class MultiInteractB extends Check implements PostPredictionCheck {
             WrapperPlayClientInteractEntity packet = new WrapperPlayClientInteractEntity(event);
             if (packet.getAction() != WrapperPlayClientInteractEntity.InteractAction.INTERACT_AT) return;
 
-            Vector3d pos = packet.getLocation();
+            Vector3f pos = packet.getTarget().orElse(null);
             if (pos == null) return; // shouldn't ever happen, but whatever
 
             if (hasInteracted && !pos.equals(lastPos)) {

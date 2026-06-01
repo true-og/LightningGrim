@@ -60,10 +60,6 @@ public class PacketOrderI extends Check implements PostPredictionCheck {
             }
         }
 
-        if (event.getPacketType() == PacketType.Play.Client.ATTACK || event.getPacketType() == PacketType.Play.Client.SPECTATE_ENTITY) {
-            onAttack(event);
-        }
-
         if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
             WrapperPlayClientPlayerDigging packet = new WrapperPlayClientPlayerDigging(event);
 

@@ -18,10 +18,8 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.DiggingAction;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientAttack;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerDigging;
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientSpectateEntity;
 
 public class PacketPlayerAttack extends PacketListenerAbstract {
 
@@ -67,21 +65,6 @@ public class PacketPlayerAttack extends PacketListenerAbstract {
             }
         }
 
-        if (event.getPacketType() == PacketType.Play.Client.ATTACK) {
-            GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
-            if (player == null) return;
-
-            WrapperPlayClientAttack packet = new WrapperPlayClientAttack(event);
-            onAttack(event, player, packet.getEntityId());
-        }
-
-        if (event.getPacketType() == PacketType.Play.Client.SPECTATE_ENTITY) {
-            GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
-            if (player == null) return;
-
-            WrapperPlayClientSpectateEntity packet = new WrapperPlayClientSpectateEntity(event);
-            onAttack(event, player, packet.getEntityId());
-        }
     }
 
     private void onAttack(PacketReceiveEvent event, GrimPlayer player, int entityId) {
