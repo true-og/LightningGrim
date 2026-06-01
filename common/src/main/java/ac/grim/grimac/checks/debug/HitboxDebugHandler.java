@@ -69,7 +69,9 @@ public class HitboxDebugHandler extends AbstractDebugHandler {
      * @param hitboxes Map of entity IDs to their collision boxes
      * @param targetEntities Set of entity IDs that are considered targets
      * @param lookVecsAndEyeHeights List of pairs containing look vectors and their corresponding eye heights
-     * @param basePos Base position before eye height adjustments
+     * @param baseX Base x coordinate before eye height adjustments
+     * @param baseY Base y coordinate before eye height adjustments
+     * @param baseZ Base z coordinate before eye height adjustments
      * @param isPrediction Whether these hitboxes are from a prediction calculation
      *
      * Packet Format (Version 1):
@@ -99,7 +101,7 @@ public class HitboxDebugHandler extends AbstractDebugHandler {
      *     - Double: maxZ
      */
     public void sendHitboxData(Map<Integer, CollisionBox> hitboxes, Set<Integer> targetEntities,
-                               List<Pair<Vector3dm, Double>> lookVecsAndEyeHeights, Vector3dm basePos,
+                               List<Pair<Vector3dm, Double>> lookVecsAndEyeHeights, double baseX, double baseY, double baseZ,
                                boolean isPrediction, double reachDistance) {
         if (!isEnabled()) return;
 
@@ -119,7 +121,7 @@ public class HitboxDebugHandler extends AbstractDebugHandler {
             buffer.writeDouble(reachDistance);
 
             // Write base position
-            writeVector(buffer, basePos);
+            writeVector(buffer, baseX, baseY, baseZ);
 
             // Write number of ray traces
             ByteBufHelper.writeVarInt(buffer, lookVecsAndEyeHeights.size());
@@ -133,7 +135,7 @@ public class HitboxDebugHandler extends AbstractDebugHandler {
                 // we make them 3 meters shorter because all of the vectors passed into here are made 3 meters longer
                 // then they need to be so grim can report correct reach distance for too far away hits
                 buffer.writeDouble(eyeHeight);
-                writeVector(buffer, lookVec);
+                writeVector(buffer, lookVec.getX(), lookVec.getY(), lookVec.getZ());
             }
 
             // Write number of hitboxes
@@ -193,13 +195,15 @@ public class HitboxDebugHandler extends AbstractDebugHandler {
     }
 
     /**
-     * Helper method to write a Vector to the ByteBuf
+     * Helper method to write vector coordinates to the ByteBuf
      * @param buffer The buffer to write to
-     * @param vector The vector to write
+     * @param x The x coordinate to write
+     * @param y The y coordinate to write
+     * @param z The z coordinate to write
      */
-    private void writeVector(ByteBuf buffer, Vector3dm vector) {
-        buffer.writeDouble(vector.getX());
-        buffer.writeDouble(vector.getY());
-        buffer.writeDouble(vector.getZ());
+    private void writeVector(ByteBuf buffer, double x, double y, double z) {
+        buffer.writeDouble(x);
+        buffer.writeDouble(y);
+        buffer.writeDouble(z);
     }
 }
