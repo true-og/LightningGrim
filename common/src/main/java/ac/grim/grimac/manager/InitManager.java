@@ -37,6 +37,9 @@ public class InitManager {
             if (initable instanceof StoppableInitable) extraStoppableInitables.add((StoppableInitable) initable);
         }
 
+        // Shared instance so stop() unregisters exactly what start() registered.
+        final PacketManager packetManager = new PacketManager();
+
         initializersOnLoad = ImmutableList.<LoadableInitable>builder()
                 .add(new PacketEventsInit(packetEventsAPI))
                 .add(() -> GrimAPI.INSTANCE.getExternalAPI().load())
@@ -45,7 +48,7 @@ public class InitManager {
 
         initializersOnStart = ImmutableList.<StartableInitable>builder()
                 .add(GrimAPI.INSTANCE.getExternalAPI())
-                .add(new PacketManager())
+                .add(packetManager)
                 .add(new ViaBackwardsManager())
                 .add(new TickRunner())
                 .add(new CommandRegister(GrimAPI.INSTANCE.getCommandService()))
@@ -60,7 +63,9 @@ public class InitManager {
                 .addAll(extraStartableInitables)
                 .build();
 
+        // Unregister listeners before terminate to avoid racing the shutdown path.
         initializersOnStop = ImmutableList.<StoppableInitable>builder()
+                .add(packetManager)
                 .add(new TerminatePacketEvents())
                 .addAll(extraStoppableInitables)
                 .build();

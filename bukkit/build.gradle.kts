@@ -27,9 +27,12 @@ repositories {
         includeGroup("me.clip")
     }
 
+    exclusive("https://repo.codemc.io/repository/maven-releases/", { mavenContent { releasesOnly() } }) {
+        includeGroup("com.github.retrooper")
+    }
+
     exclusive("https://repo.grim.ac/snapshots") {
         includeGroup("ac.grim.grimac")
-        includeGroup("com.github.retrooper")
     }
 
     exclusive("https://nexus.scarsz.me/content/repositories/releases", { mavenContent { releasesOnly() } }) {
@@ -65,7 +68,8 @@ bukkit {
     foliaSupported = true
 
     if (!BuildConfig.shadePE) {
-        depend = listOf("packetevents")
+        // Bukkit `depend` is case-sensitive; canonical PE plugin name is PascalCase.
+        depend = listOf("PacketEvents")
     }
 
     softDepend = listOf(
@@ -79,6 +83,7 @@ bukkit {
         "floodgate",
         "FastLogin",
         "PlaceholderAPI",
+        "ZNPCsPlus",
     )
 
     permissions {
@@ -155,9 +160,21 @@ publishing.publications.create<MavenPublication>("maven") {
     artifact(tasks.named("shadowJar"))
 }
 
+apply(from = "$projectDir/gradle/packetevents-provider.gradle.kts")
+
+@Suppress("UNCHECKED_CAST")
+val registerStagePE = project.extra["registerStagePacketEventsTask"]
+    as (org.gradle.api.Project, String, java.io.File) -> org.gradle.api.tasks.TaskProvider<Copy>
+
+val stagePEJar = registerStagePE(project, "stageLocalPacketEvents", file("run"))
+
 tasks {
     runServer {
         minecraftVersion("1.21.11")
+        // External mode stages the locally built True-OG PacketEvents JAR.
+        if (!BuildConfig.shadePE) {
+            dependsOn(stagePEJar)
+        }
     }
 
     shadowJar {

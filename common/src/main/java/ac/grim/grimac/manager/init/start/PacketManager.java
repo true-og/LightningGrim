@@ -4,45 +4,74 @@ import ac.grim.grimac.events.packets.*;
 import ac.grim.grimac.events.packets.worldreader.BasePacketWorldReader;
 import ac.grim.grimac.events.packets.worldreader.PacketWorldReaderEight;
 import ac.grim.grimac.events.packets.worldreader.PacketWorldReaderEighteen;
+import ac.grim.grimac.manager.init.load.PacketEventsInit;
+import ac.grim.grimac.manager.init.stop.StoppableInitable;
 import ac.grim.grimac.utils.anticheat.LogUtil;
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListenerCommon;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 
-public class PacketManager implements StartableInitable {
+import java.util.ArrayList;
+import java.util.List;
+
+public class PacketManager implements StartableInitable, StoppableInitable {
+
+    private final List<PacketListenerCommon> registeredHandles = new ArrayList<>();
+
     @Override
     public void start() {
         LogUtil.info("Registering packets...");
 
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketPlayerJoinQuit());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketPingListener());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketPlayerWindow());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketPlayerDigging());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketPlayerAttack());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketEntityAction());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketBlockAction());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketSelfMetadataListener());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketServerTeleport());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketPlayerCooldown());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketPlayerRespawn());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketPlayerTick());
-        PacketEvents.getAPI().getEventManager().registerListener(new CheckManagerListener());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketPlayerSteer());
+        registerTracked(new PacketPlayerJoinQuit());
+        registerTracked(new PacketPingListener());
+        registerTracked(new PacketPlayerWindow());
+        registerTracked(new PacketPlayerDigging());
+        registerTracked(new PacketPlayerAttack());
+        registerTracked(new PacketEntityAction());
+        registerTracked(new PacketBlockAction());
+        registerTracked(new PacketSelfMetadataListener());
+        registerTracked(new PacketServerTeleport());
+        registerTracked(new PacketPlayerCooldown());
+        registerTracked(new PacketPlayerRespawn());
+        registerTracked(new PacketPlayerTick());
+        registerTracked(new CheckManagerListener());
+        registerTracked(new PacketPlayerSteer());
 
         if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)) {
-            PacketEvents.getAPI().getEventManager().registerListener(new PacketServerTags());
+            registerTracked(new PacketServerTags());
         }
 
         if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_18)) {
-            PacketEvents.getAPI().getEventManager().registerListener(new PacketWorldReaderEighteen());
+            registerTracked(new PacketWorldReaderEighteen());
         } else if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_8_8)) {
-            PacketEvents.getAPI().getEventManager().registerListener(new PacketWorldReaderEight());
+            registerTracked(new PacketWorldReaderEight());
         } else {
-            PacketEvents.getAPI().getEventManager().registerListener(new BasePacketWorldReader());
+            registerTracked(new BasePacketWorldReader());
         }
 
-        PacketEvents.getAPI().getEventManager().registerListener(new ProxyAlertMessenger());
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketHidePlayerInfo());
+        registerTracked(new ProxyAlertMessenger());
+        registerTracked(new PacketHidePlayerInfo());
 
-        PacketEvents.getAPI().init();
+        // init() belongs to the lifecycle owner; the external provider has already called it.
+        if (PacketEventsInit.isShadePE()) {
+            PacketEvents.getAPI().init();
+        }
+    }
+
+    private void registerTracked(PacketListenerCommon listener) {
+        PacketEvents.getAPI().getEventManager().registerListener(listener);
+        registeredHandles.add(listener);
+    }
+
+    @Override
+    public void stop() {
+        for (PacketListenerCommon handle : registeredHandles) {
+            try {
+                PacketEvents.getAPI().getEventManager().unregisterListener(handle);
+            } catch (Throwable t) {
+                LogUtil.warn("Failed to unregister PE listener: " + t.getMessage());
+            }
+        }
+        registeredHandles.clear();
     }
 }

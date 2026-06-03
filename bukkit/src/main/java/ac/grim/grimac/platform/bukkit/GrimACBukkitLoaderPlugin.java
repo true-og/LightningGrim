@@ -9,6 +9,7 @@ import ac.grim.grimac.api.plugin.GrimPlugin;
 import ac.grim.grimac.command.CloudCommandService;
 import ac.grim.grimac.internal.platform.bukkit.resolver.BukkitResolverRegistrar;
 import ac.grim.grimac.manager.init.Initable;
+import ac.grim.grimac.manager.init.load.PacketEventsInit;
 import ac.grim.grimac.manager.init.start.ExemptOnlinePlayersOnReload;
 import ac.grim.grimac.manager.init.start.StartableInitable;
 import ac.grim.grimac.platform.api.Platform;
@@ -58,7 +59,13 @@ public final class GrimACBukkitLoaderPlugin extends JavaPlugin implements Platfo
     public static GrimACBukkitLoaderPlugin LOADER;
 
     private final LazyHolder<PlatformScheduler> scheduler = LazyHolder.simple(this::createScheduler);
-    private final LazyHolder<PacketEventsAPI<?>> packetEvents = LazyHolder.simple(() -> SpigotPacketEventsBuilder.build(this));
+    private final LazyHolder<PacketEventsAPI<?>> packetEvents = LazyHolder.simple(() -> {
+        // External mode reuses the installed provider's API (plugin.yml depend orders load before this).
+        if (PacketEventsInit.isShadePE()) {
+            return SpigotPacketEventsBuilder.build(this);
+        }
+        return com.github.retrooper.packetevents.PacketEvents.getAPI();
+    });
     private final LazyHolder<BukkitSenderFactory> senderFactory = LazyHolder.simple(BukkitSenderFactory::new);
     private final LazyHolder<ItemResetHandler> itemResetHandler = LazyHolder.simple(BukkitItemResetHandler::new);
     private final LazyHolder<CommandService> commandService = LazyHolder.simple(this::createCommandService);

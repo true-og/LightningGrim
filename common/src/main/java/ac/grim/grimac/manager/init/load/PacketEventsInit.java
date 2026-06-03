@@ -1,6 +1,7 @@
 package ac.grim.grimac.manager.init.load;
 
 import ac.grim.grimac.utils.anticheat.LogUtil;
+import ac.grim.grimac.utils.common.PropertiesUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.protocol.chat.ChatTypes;
@@ -12,6 +13,7 @@ import com.github.retrooper.packetevents.protocol.particle.type.ParticleTypes;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 import com.github.retrooper.packetevents.util.PEVersion;
 
+import java.util.Properties;
 import java.util.concurrent.Executors;
 
 public class PacketEventsInit implements LoadableInitable {
@@ -26,26 +28,41 @@ public class PacketEventsInit implements LoadableInitable {
     @Override
     public void load() {
         LogUtil.info("Loading PacketEvents...");
-        PacketEvents.setAPI(packetEventsAPI);
 
-        if (!checkPacketEventsVersion()) {
-            LogUtil.error("\n" +
-                    "******************************************************\n" +
-                    "LightningGrim requires PacketEvents >= " + MINIMUM_REQUIRED_PE_VERSION +
-                    (MINIMUM_REQUIRED_PE_VERSION.snapshot() ? "-SNAPSHOT" : "") + "\n" +
-                    "Current version: " + PacketEvents.getAPI().getVersion() + "\n" +
-                    "Please update PacketEvents to a compatible version.\n" +
-                    "*****************************************************");
+        if (isShadePE()) {
+            // Shaded build owns the lifecycle.
+            PacketEvents.setAPI(packetEventsAPI);
+
+            if (!checkPacketEventsVersion()) {
+                LogUtil.error("\n" +
+                        "******************************************************\n" +
+                        "LightningGrim requires PacketEvents >= " + MINIMUM_REQUIRED_PE_VERSION +
+                        (MINIMUM_REQUIRED_PE_VERSION.snapshot() ? "-SNAPSHOT" : "") + "\n" +
+                        "Current version: " + PacketEvents.getAPI().getVersion() + "\n" +
+                        "Please update PacketEvents to a compatible version.\n" +
+                        "*****************************************************");
+            }
+
+            PacketEvents.getAPI().getSettings()
+                    .fullStackTrace(true)
+                    .kickOnPacketException(true)
+                    .checkForUpdates(false)
+                    .reEncodeByDefault(false)
+                    .debug(false);
+            PacketEvents.getAPI().load();
+        } else {
+            // External provider owns settings + load; only verify the running version.
+            if (!checkPacketEventsVersion()) {
+                LogUtil.error("\n" +
+                        "******************************************************\n" +
+                        "LightningGrim requires PacketEvents >= " + MINIMUM_REQUIRED_PE_VERSION + "\n" +
+                        "Current version: " + PacketEvents.getAPI().getVersion() + "\n" +
+                        "Please update PacketEvents to a compatible version.\n" +
+                        "*****************************************************");
+            }
         }
 
-        PacketEvents.getAPI().getSettings()
-                .fullStackTrace(true)
-                .kickOnPacketException(true)
-                .checkForUpdates(false)
-                .reEncodeByDefault(false)
-                .debug(false);
-        PacketEvents.getAPI().load();
-        // This may seem useless, but it causes java to start loading stuff async before we need it
+        // Async warm-up so JIT class-loads PE types before the first packet arrives.
         Executors.defaultThreadFactory().newThread(() -> {
             StateTypes.AIR.getName();
             ItemTypes.AIR.getName();
@@ -61,28 +78,28 @@ public class PacketEventsInit implements LoadableInitable {
         PEVersion current = PacketEvents.getAPI().getVersion();
         PEVersion required = MINIMUM_REQUIRED_PE_VERSION;
 
-        // If current version is newer, always accept
         if (current.isNewerThan(required)) {
             return true;
         }
 
-        // If current version is exactly equal to required (including snapshot status), accept
-        if (current.major() == required.major()
+        // Accept any 2.11.2 regardless of snapshot status; the True-OG fork self-reports a snapshot.
+        return current.major() == required.major()
                 && current.minor() == required.minor()
-                && current.patch() == required.patch()
-                && current.snapshot() == required.snapshot()) {
-            return true;
-        }
+                && current.patch() == required.patch();
+    }
 
-        // If required is a snapshot, accept matching release or snapshot
-        if (required.snapshot()
-                && current.major() == required.major()
-                && current.minor() == required.minor()
-                && current.patch() == required.patch()) {
-            return true;
-        }
+    /** Cached read of {@code build.shade_pe} from {@code grimac.properties}. */
+    private static volatile Boolean cachedShadePE;
 
-        // Otherwise, reject
-        return false;
+    public static boolean isShadePE() {
+        Boolean cached = cachedShadePE;
+        if (cached != null) return cached;
+        synchronized (PacketEventsInit.class) {
+            if (cachedShadePE != null) return cachedShadePE;
+            final Properties properties = PropertiesUtil.readProperties(PacketEventsInit.class, "grimac.properties");
+            final String raw = properties.getProperty("build.shade_pe", "false");
+            cachedShadePE = Boolean.parseBoolean(raw.trim());
+            return cachedShadePE;
+        }
     }
 }

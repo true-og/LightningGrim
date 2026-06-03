@@ -38,7 +38,7 @@ import versioning.BuildConfig.shadePE
  * ./gradlew build -DshadePE=true -Drelease=true
  * ```
  *
- * @property shadePE  If true, shades PacketEvents into the jar. Default: true.
+ * @property shadePE  Bundles PacketEvents into the jar when true; consumes an external provider when false (default; emits the `-lite` artifact).
  * @property relocate If true, relocates shaded dependencies to avoid conflicts. Default: true.
  * @property release  If true, omits commit hash and modifiers from version string. Default: false.
  * @property mavenLocalOverride If true, will make artifacts in mavenLocal() will be used instead of their remote counterparts for this build. Default: false
@@ -53,7 +53,7 @@ object BuildConfig {
      * ```
      */
     fun init(project: Project) {
-        _shadePE = resolveBool(project, "shadePE", altKey = "SHADE_PE", default = true)
+        _shadePE = resolveBool(project, "shadePE", altKey = "SHADE_PE", default = false)
         _relocate = resolveBool(project, "relocate", altKey = "RELOCATE_JAR", default = true)
         _release = resolveBool(project, "release", default = false)
         _mavenLocalOverride = resolveBool(project, "mavenLocalOverride", altKey = "MAVEN_LOCAL_OVERRIDE", default = false)
@@ -78,7 +78,7 @@ object BuildConfig {
     private var _release: Boolean? = null
     private var _mavenLocalOverride: Boolean? = null
 
-    /** If true, shades PacketEvents into the jar. Default: true. */
+    /** If true, shades PacketEvents into the jar. Default: false (external provider). */
     val shadePE: Boolean get() = _shadePE
         ?: error("BuildConfig.shadePE accessed before init() was called")
 

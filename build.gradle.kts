@@ -2,7 +2,7 @@
  *          GrimAC Build Configuration
  *
  * Build Flags:
- * -PshadePE=true   - Enables 'lite' mode
+ * -PshadePE=true   - Bundles PacketEvents into the jar (default: external/lite).
  * -Prelocate=false - Adds 'no_relocate' modifier
  * -Prelease=true   - Removes commit/modifiers for release build
  *
@@ -20,7 +20,7 @@ import versioning.VersionUtil
 
 BuildConfig.init(project)
 
-val baseVersion = "2.3.74"
+val baseVersion = "2.3.73"
 group = "ac.grim.grimac"
 version = VersionUtil.computeVersion(baseVersion)
 description = "Libre simulation anticheat designed for 1.21 with 1.8–1.21 support, powered by PacketEvents 2.11.2."
