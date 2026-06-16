@@ -39,7 +39,7 @@ spectators:
         - ""
 
 # How long should players have until we kick them for timing out? Default = 60 seconds
-max-transaction-time: 60
+max-transaction-time: 50
 
 # Enable this to stop LightningGrim cancelling pongs received from players.
 # This may improve compatibility with other anticheats. It may cause issues with packet limiters.
@@ -51,12 +51,12 @@ disable-pong-cancelling: false
 # If you use plugins that create fake packet-based blocks (which don't exist in the server world),
 # you should set this to true to prevent Grim from overwriting them with air/real blocks.
 # This forces the use of a "NoOp" (No Operation) handler unless a custom one is provided via API.
-disable-default-resync-handler: false
+disable-default-resync-handler: true
 
 # Should the duplicate movement packet be cancelled?
 # Mojang has fixed this issue in 1.21. This was their attempt to fix the "bucket desync". https://bugs.mojang.com/browse/MC-12363
 # This setting only applies to 1.17-1.20.5 clients on 1.8 servers.
-cancel-duplicate-packet: true
+cancel-duplicate-packet: false
 
 # Whether or not to ignore the rotation in duplicate packets
 ignore-duplicate-packet-rotation: false
@@ -72,10 +72,12 @@ Simulation:
     threshold: 0.001
     # How large of a violation in a tick before the player gets immediately setback?
     # -1 to disable
-    immediate-setback-threshold: 0.1
+    # DISABLED: NCP survivalfly owns survival movement. Grim must not setback movement or the two engines fight (rubberbanding). Prediction still runs for reach/noslow/knockback.
+    immediate-setback-threshold: -1
     # How large of an advantage over all ticks before we start to setback?
     # -1 to disable
-    max-advantage: 1
+    # DISABLED: see immediate-setback-threshold above. NCP survivalfly is the movement authority.
+    max-advantage: -1
     # After 50 seconds with default config, the player will go from 4 blocks -> 1 block of advantage
     # This is to stop the player from gathering too many violations and never being able to clear them all
     # Default advantage ceiling (x axis = seconds, y axis = 1/1000 block): https://www.desmos.com/calculator/4lovswdarj
@@ -147,7 +149,7 @@ TimerLimit:
     # Ping at which the check will start to limit timer balance, to prevent abuse.
     # Can cause some setbacks for legitimate players but only if they are over this ping threshold.
     # -1 to disable
-    ping-abuse-limit-threshold: 1000
+    ping-abuse-limit-threshold: 850
 
 NegativeTimer:
     # Number of milliseconds lost while moving before we should start flagging
@@ -160,7 +162,7 @@ VehicleTimer:
 
 PacketOrderI:
     # enable if players are getting flagged for using 1.7 animations mods
-    exempt-placing-while-digging: false
+    exempt-placing-while-digging: true
 
 Reach:
     # How much should we expand hitboxes by? 0.0005 should detect 3.0005+ reach
@@ -178,18 +180,21 @@ Reach:
     # Enabling this will catch more cheaters.
     # Leaving this disabled will still catch cheaters and will not cause false positives
     # Unless you are a 1.8 PvP focused server, this additional packet is not recommended
-    enable-post-packet: false
+    enable-post-packet: true
 
 exploit:
     # You can gain high speeds when sprint jumping with an elytra, this prevents the exploit when set to false
     # Mojang screwed up netcode by making elytra start client sided and elytra end server sided
     # Elytras take 0.99 horizontal friction, so constantly adding 0.2 horizontal speeds results in very high speeds.
-    allow-sprint-jumping-when-using-elytra: true
+    allow-sprint-jumping-when-using-elytra: false
     # This option mitigates the player's placement on ghostblocks by resynchronizing the player when it happens
-    allow-building-on-ghostblocks: true
+    allow-building-on-ghostblocks: false
     # This setting, influenced by the boolean above defines the distance to check for ghost blocks
     # Its valid range is limited from 2 to 4
-    distance-to-check-if-ghostblocks: 2
+    distance-to-check-if-ghostblocks: 3
+
+# Skip Grim movement prediction while gliding so NCP creativefly owns elytra and mid-air elytra takeoff/transitions never false (combat checks stay active).
+exempt-elytra: true
 
 # Enable logging plugins who have injected into netty on join to debug compatibility issues
 debug-pipeline-on-join: false
@@ -206,31 +211,31 @@ reset-item-usage-on-item-use: true
 # we simply kick the player? This is required as some packet limiters don't count packets cancelled by grim.
 packet-spam-threshold: 100
 # Enable this to print a stacktrace when a player is kicked due to packet-spam-threshold
-debug-packet-cancel: false
+debug-packet-cancel: true
 
 # LightningGrim is able to enforce that a player set out of flying state cannot have more than X milliseconds of ping
 # This is due to LightningGrim not currently checking flying players
 # To disable, use -1
-max-ping-out-of-flying: 1000
+max-ping-out-of-flying: 900
 
 # Maximum ping when a firework boost is removed from the player.
 # This prevents high latency players from being able to use 1 firework boost with an elytra forever.
-max-ping-firework-boost: 1000
+max-ping-firework-boost: 900
 
 history:
     enabled: true
     # How many entries should be shown for each page with /grim history <player>
-    entries-per-page: 15
+    entries-per-page: 100
     # What should the inserted server name be for the history command? This is useful if you use the same database for multiple servers
-    server-name: Prison
+    server-name: TrueOG
     database:
         # Use SQLITE for local storage, use MYSQL or POSTGRESQL if you have an external database. This is only updated on server restart
-        type: SQLITE
+        type: POSTGRESQL
         # database connection details
         host: localhost
-        port: 3306
+        port: 5432
         database: grim
-        username: root
-        password: ""
+        username: "^{POSTGRES_USER}"
+        password: "^{POSTGRES_PASSWORD}"
 
 config-version: 9

@@ -14,7 +14,7 @@ Punishments:
     # To exclude a check that would otherwise be matched, put an exclamation mark in front of the name
     # For example, !BadPacketsN
     checks:
-      - "Simulation"
+      # "Simulation" removed: NCP survivalfly owns/alerts movement; Grim keeps GroundSpoof, Timer/TimerLimit, NoFall.
       - "GroundSpoof"
       - "Timer"
       - "TimerLimit"
