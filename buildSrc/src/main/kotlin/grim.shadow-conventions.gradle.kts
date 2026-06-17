@@ -10,6 +10,8 @@ tasks.named<ShadowJar>("shadowJar") {
         // The PostgreSQL JDBC driver is loaded reflectively via java.sql ServiceLoader,
         // so minimize() sees no direct references and would strip it. Keep it whole.
         exclude(dependency("org.postgresql:postgresql:.*"))
+        // Same for the SLF4J NOP provider, loaded via SLF4JServiceProvider ServiceLoader.
+        exclude(dependency("org.slf4j:slf4j-nop:.*"))
     }
     archiveFileName = "${rootProject.name}-${project.name}-${rootProject.version}.jar"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE

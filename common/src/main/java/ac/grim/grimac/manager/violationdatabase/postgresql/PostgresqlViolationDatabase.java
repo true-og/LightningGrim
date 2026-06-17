@@ -31,6 +31,7 @@ public class PostgresqlViolationDatabase implements ViolationDatabase {
 
     private void setupDataSource(String url, String database, String username, String password) {
         HikariConfig config = new HikariConfig();
+        config.setDriverClassName(org.postgresql.Driver.class.getName()); // load shaded driver via plugin classloader; DriverManager can't see it
         config.setJdbcUrl("jdbc:postgresql://" + url + "/" + database);
         config.setUsername(username);
         config.setPassword(password);

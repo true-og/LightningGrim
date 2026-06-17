@@ -57,7 +57,7 @@ subprojects {
 tasks.register<Copy>("copyBukkitJarToRoot") {
     dependsOn(":bukkit:shadowJar")
     from(project(":bukkit").layout.buildDirectory.dir("libs")) {
-        include("LightningGrim-bukkit-*.jar")
+        include("LightningGrim-bukkit-$version.jar") // current build only; stale jars from prior commits would collide on rename
         rename("LightningGrim-bukkit-.*\\.jar", "LightningGrim-$baseVersion.jar")
     }
     into(layout.buildDirectory.dir("libs"))
