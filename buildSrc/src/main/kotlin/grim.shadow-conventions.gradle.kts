@@ -6,7 +6,11 @@ plugins {
 }
 
 tasks.named<ShadowJar>("shadowJar") {
-    minimize()
+    minimize {
+        // The PostgreSQL JDBC driver is loaded reflectively via java.sql ServiceLoader,
+        // so minimize() sees no direct references and would strip it. Keep it whole.
+        exclude(dependency("org.postgresql:postgresql:.*"))
+    }
     archiveFileName = "${rootProject.name}-${project.name}-${rootProject.version}.jar"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
@@ -32,6 +36,7 @@ tasks.named<ShadowJar>("shadowJar") {
         relocate("org.incendo", "ac.grim.grimac.shaded.incendo")
         relocate("io.leangen.geantyref", "ac.grim.grimac.shaded.geantyref") // Required by cloud
         relocate("com.zaxxer", "ac.grim.grimac.shaded.zaxxer") // Database history
+        relocate("org.postgresql", "ac.grim.grimac.shaded.postgresql") // Database history (JDBC driver); service file rewritten by mergeServiceFiles
     }
     mergeServiceFiles()
 }

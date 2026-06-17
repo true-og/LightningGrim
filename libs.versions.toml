@@ -21,6 +21,7 @@ fastutil = "8.5.15"
 hikaricp = "7.0.2"
 jetbrains-annotations = "24.1.0"
 netty = "4.1.85.Final"
+postgresql = "42.7.11"
 snakeyaml = "2.2"
 configuralize = "1.4.1" # :slim classifier is applied in build.gradle.kts
 
@@ -63,6 +64,7 @@ fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil"
 hikaricp = { group = "com.zaxxer", name = "HikariCP", version.ref = "hikaricp" }
 jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrains-annotations" }
 netty = { group = "io.netty", name = "netty-all", version.ref = "netty" }
+postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version.ref = "snakeyaml" }
 
 # --- Build Tooling (Fabric) ---

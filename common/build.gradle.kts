@@ -67,6 +67,7 @@ dependencies {
     api(libs.adventure.text.minimessage)
     api(libs.jetbrains.annotations)
     api(libs.hikaricp)
+    api(libs.postgresql) // JDBC driver for /grim history postgresql backend
 
     api(libs.grim.api)
     api(libs.grim.internal)

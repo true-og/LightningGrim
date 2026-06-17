@@ -54,7 +54,8 @@ dependencies {
     implementation(libs.cloud.paper)
     implementation(libs.adventure.platform.bukkit)
     implementation(libs.grim.bukkit.internal)
-
+    implementation("org.slf4j:slf4j-nop:2.0.17") // Provide SLF4J NOP provider to suppress missing-provider warning.
+    implementation("org.slf4j:slf4j-api:2.0.17") // Bundle a relocated SLF4J API for shaded dependencies.
     implementation(project(":common"))
     shadow(project(":common"))
 }
@@ -178,6 +179,7 @@ tasks {
     }
 
     shadowJar {
+        mergeServiceFiles()
         manifest {
             attributes["paperweight-mappings-namespace"] = "mojang"
         }
