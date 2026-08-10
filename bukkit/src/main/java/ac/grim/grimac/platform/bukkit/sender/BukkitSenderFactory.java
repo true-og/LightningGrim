@@ -3,8 +3,6 @@ package ac.grim.grimac.platform.bukkit.sender;
 import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.platform.api.sender.SenderFactory;
-import ac.grim.grimac.platform.bukkit.GrimACBukkitLoaderPlugin;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -18,11 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public class BukkitSenderFactory extends SenderFactory<CommandSender> implements SenderMapper<CommandSender, Sender> {
-    private final BukkitAudiences audiences;
-
-    public BukkitSenderFactory() {
-        this.audiences = BukkitAudiences.create(GrimACBukkitLoaderPlugin.LOADER);
-    }
 
     @Override
     protected String getName(CommandSender sender) {
@@ -42,12 +35,13 @@ public class BukkitSenderFactory extends SenderFactory<CommandSender> implements
     @Override
     protected void sendMessage(CommandSender sender, Component message) {
         // we can safely send async for players and the console - otherwise, send it sync
+        // Paper/Purpur CommandSender is natively an Adventure Audience, so no platform shim is needed
         if (sender instanceof Player || sender instanceof ConsoleCommandSender || sender instanceof RemoteConsoleCommandSender) {
-            this.audiences.sender(sender).sendMessage(message);
+            sender.sendMessage(message);
         } else {
             GrimAPI.INSTANCE.getScheduler().getGlobalRegionScheduler().run(
                     GrimAPI.INSTANCE.getGrimPlugin(),
-                    () -> this.audiences.sender(sender).sendMessage(message)
+                    () -> sender.sendMessage(message)
             );
         }
     }

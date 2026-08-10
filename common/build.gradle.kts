@@ -64,7 +64,8 @@ dependencies {
     // Bump snakeyaml (transitive dep of configuralize) 1.29 -> 2.2+ for geyser-fabric
     api(libs.snakeyaml)
     api(libs.fastutil)
-    api(libs.adventure.text.minimessage)
+    // Provided by the server at runtime; bundling it would shadow the platform's own Adventure
+    compileOnly(libs.adventure.text.minimessage)
     api(libs.jetbrains.annotations)
     api(libs.hikaricp)
     api(libs.postgresql) // JDBC driver for /grim history postgresql backend

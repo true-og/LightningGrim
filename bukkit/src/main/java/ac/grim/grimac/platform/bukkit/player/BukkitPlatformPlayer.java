@@ -18,7 +18,6 @@ import com.github.retrooper.packetevents.protocol.player.User;
 import com.github.retrooper.packetevents.util.Vector3d;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
 import lombok.Getter;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -31,8 +30,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class BukkitPlatformPlayer extends BukkitGrimEntity implements PlatformPlayer {
-
-    private static final BukkitAudiences audiences = BukkitAudiences.create(GrimACBukkitLoaderPlugin.LOADER);
 
     @Getter
     private final Player bukkitPlayer;
@@ -92,7 +89,8 @@ public class BukkitPlatformPlayer extends BukkitGrimEntity implements PlatformPl
         if (CommonGrimArguments.USE_CHAT_FAST_BYPASS.value() && user != null) {
             user.sendMessage(message);
         } else {
-            audiences.player(bukkitPlayer).sendMessage(message);
+            // Paper/Purpur Player is natively an Adventure Audience, so no platform shim is needed
+            bukkitPlayer.sendMessage(message);
         }
     }
 

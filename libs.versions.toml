@@ -1,7 +1,7 @@
 [versions]
 # --- Platform Dependencies ---
-adventure = "4.23.0"
-adventure-platform-bukkit = "4.4.0"
+# Matches the Adventure bundled by Purpur/Paper 1.19.4, so nothing is shaded against a newer API
+adventure = "4.13.1"
 paper-api = "1.20.6-R0.1-SNAPSHOT"
 cloud = "2.0.0"
 cloud-paper = "2.0.0-beta.14"
@@ -34,7 +34,6 @@ spotless = "6.25.0"
 
 [libraries]
 # --- Core Frameworks: Adventure (Text) & Cloud (Commands) ---
-adventure-platform-bukkit = { group = "net.kyori", name = "adventure-platform-bukkit", version.ref = "adventure-platform-bukkit" }
 adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
 cloud-core = { group = "org.incendo", name = "cloud-core", version.ref = "cloud" }
 cloud-fabric = { group = "org.incendo", name = "cloud-fabric", version.ref = "cloud-fabric" }
