@@ -80,7 +80,8 @@ public class FastBreak extends Check implements BlockBreakCheck {
                 blockDelayBalance += 300 - breakDelay;
             }
 
-            if (blockDelayBalance > 1000) { // If more than a second of advantage
+            // Skip flagging clients whose tick rate is unobservable, like MultiBreak does
+            if (blockDelayBalance > 1000 && player.isTickingReliablyFor(3)) { // If more than a second of advantage
                 if (flagAndAlert("delay=" + breakDelay + "ms, type=" + blockBreak.block.getType()) && shouldModifyPackets()) {
                     blockBreak.cancel();
                 }
@@ -102,7 +103,8 @@ public class FastBreak extends Check implements BlockBreakCheck {
                 blockBreakBalance += diff;
             }
 
-            if (blockBreakBalance > 1000) { // If more than a second of advantage
+            // Skip flagging clients whose tick rate is unobservable, like MultiBreak does
+            if (blockBreakBalance > 1000 && player.isTickingReliablyFor(3)) { // If more than a second of advantage
                 if (flagAndAlert("diff=" + diff + "ms, balance=" + blockBreakBalance + "ms, type=" + blockBreak.block.getType()) && shouldModifyPackets()) {
                     blockBreak.cancel();
                 }
