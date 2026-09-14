@@ -189,7 +189,7 @@ exploit:
     allow-building-on-ghostblocks: true
     # Bu ayar, yukarıdaki boolean ile etkilenen hayalet blokları kontrol etmek için mesafeyi tanımlar
     # Geçerli aralığı 2 ile 4 arasında sınırlıdır
-    distance-to-check-if-ghostblocks: 2
+    distance-to-check-for-ghostblocks: 2
 
 # Netty'ye enjekte olan eklentileri giriş sırasında günlüklemeyi etkinleştirerek uyumluluk sorunlarını gider
 debug-pipeline-on-join: false

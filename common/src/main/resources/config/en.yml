@@ -92,19 +92,19 @@ Phase:
     decay: 0.005
 
 AirLiquidPlace:
-    cancelvl: 0
+    cancelvl: 5
 
 FabricatedPlace:
-    cancelvl: 5
+    cancelvl: 10
 
 FarPlace:
-    cancelvl: 5
+    cancelvl: 10
 
 PositionPlace:
-    cancelvl: 5
+    cancelvl: 10
 
 RotationPlace:
-    cancelvl: 5
+    cancelvl: 10
 
 # Prediction-based no slow check
 # LightningGrim accounts for buggy netcode here... hard to false even when spamming right click and offhand button
@@ -191,7 +191,7 @@ exploit:
     allow-building-on-ghostblocks: false
     # This setting, influenced by the boolean above defines the distance to check for ghost blocks
     # Its valid range is limited from 2 to 4
-    distance-to-check-if-ghostblocks: 3
+    distance-to-check-for-ghostblocks: 3
 
 # Skip Grim movement prediction while gliding so NCP creativefly owns elytra and mid-air elytra takeoff/transitions never false (combat checks stay active).
 exempt-elytra: true
